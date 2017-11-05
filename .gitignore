@@ -100,3 +100,6 @@ virtualEnv/
 .mypy_cache/
 
 .idea
+
+WebRat/key.json
+WebRat/static/
