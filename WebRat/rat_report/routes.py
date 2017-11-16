@@ -49,4 +49,25 @@ def get_latest_50():
     rt = RatReportUtil()
     result = rt.get_latest_reports()
 
-    return jsonify(result)
+    return jsonify({
+        'list': result
+    })
+
+
+@rat_report_blueprint.route('/setLargestUniqueKey', methods=['GET'])
+def set_largest_unique_key():
+    rt = RatReportUtil()
+    result = rt.set_largest_unique_key(request.args.get('key'))
+
+    return str(result)
+
+
+@rat_report_blueprint.route('/getLargestUniqueKey', methods=['GET'])
+def get_largest_unique_key():
+    rt = RatReportUtil()
+    result = rt.get_largest_unique_key()
+
+    return str(result)
+
+
+

@@ -14,6 +14,7 @@ firebase_admin.initialize_app(credentials.Certificate(os.path.dirname(__file__) 
 
 @app.route('/', methods=['GET'])
 def root_handler():
+    print('[Backend] hitting default handler')
     return app.send_static_file('index.html')
 
 
@@ -30,4 +31,16 @@ def new_report_handler():
 @app.route('/hello', methods=['GET'])
 def handler():
     return 'aaaa'
+
+
+@app.route('/viewLatestReports', methods=['GET'])
+def view_latest_reports_handler():
+    return app.send_static_file('index.html')
+
+# @app.route("/", defaults={"path": ""})
+# @app.route("/<string:path>")
+# @app.route("/<path:path>")
+# def catch_all(path):
+#     return 'You want path: %s' % path
+
 

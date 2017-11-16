@@ -7,12 +7,23 @@ class RatReportUtil(object):
         self.firebase = FirebaseWrapper()
 
     def submit_new_report(self, new_report):
-        loc = '/qa/ratData/'
-        unique_key = self.generate_report_keyat_loc(loc)
-        new_report['unique_key'] = unique_key
+        loc = '/pr/ratData/'
+        new_unique_key = self.get_new_report_unique_key()
+
+        if new_unique_key == '-1':
+            print('[RatReportUtil][submit_new_report] getting new unique key failed')
+
+            return False
+
+        new_report['unique_key'] = new_unique_key
         new_report['createdDate'] = self.generate_timestamp()
 
-        return self.firebase.save_data(loc + unique_key, new_report)
+        save_status = self.firebase.save_data(loc + new_unique_key, new_report)
+        if save_status:
+            if self.set_largest_unique_key(new_unique_key):
+                return True
+
+        return False
 
     def generate_report_keyat_loc(self, loc):
         candidate_key = random.randint(00000000, 99999999)
@@ -30,7 +41,22 @@ class RatReportUtil(object):
         return '{:%m/%d/%Y %I:%M:%S %p}'.format(datetime.datetime.now())
 
     def get_latest_reports(self, limit=50):
-        return self.firebase.get_latest_entries(limit)
+        result_dict = self.firebase.get_latest_entries(limit)
+        return [result_dict[k] for k in result_dict]
+
+    def get_largest_unique_key(self):
+        return self.firebase.get_largest_unique_key()
+
+    def set_largest_unique_key(self, key):
+        return self.firebase.set_largest_unique_key(key)
+
+    def get_new_report_unique_key(self):
+        curr_largest_uk = self.get_largest_unique_key()
+        try:
+            new_key = str(int(curr_largest_uk) + 1)
+            return new_key
+        except:
+            return '-1'
 
 if __name__ == '__main__':
     test = RatReportUtil()
