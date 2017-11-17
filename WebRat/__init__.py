@@ -37,6 +37,12 @@ def handler():
 def view_latest_reports_handler():
     return app.send_static_file('index.html')
 
+
+@app.route('/viewReport', methods=['GET'])
+def view_report_handler():
+    return app.send_static_file('index.html')
+
+
 # @app.route("/", defaults={"path": ""})
 # @app.route("/<string:path>")
 # @app.route("/<path:path>")

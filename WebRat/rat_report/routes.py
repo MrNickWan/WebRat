@@ -1,5 +1,4 @@
 from flask import Blueprint
-from firebase_admin import db
 from flask import request
 from flask import jsonify
 from WebRat.util.rat_report import RatReportUtil
@@ -10,9 +9,11 @@ rat_report_blueprint = Blueprint('rat_report_service', __name__)
 
 @rat_report_blueprint.route('/getReport', methods=['GET'])
 def get_rat_report_data():
-    ref = db.reference('/qa/ratData/31464015')
-    print(ref.get())
-    return 'works'
+
+    rt = RatReportUtil()
+    result = rt.get_report_with_id(request.args.get('id'))
+
+    return jsonify(result)
 
 
 @rat_report_blueprint.route('/saveReport', methods=['post'])
@@ -68,6 +69,13 @@ def get_largest_unique_key():
     result = rt.get_largest_unique_key()
 
     return str(result)
+
+
+@rat_report_blueprint.route('/deleteReport', methods=['POST'])
+def delete_report_handler():
+    rt = RatReportUtil()
+
+    return str(rt.delete_report(request.get_json()['reportId']))
 
 
 

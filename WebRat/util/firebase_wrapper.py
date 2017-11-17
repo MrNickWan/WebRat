@@ -37,6 +37,18 @@ class FirebaseWrapper(object):
 
         return list(result.keys())[0]
 
+    def get_report(self, report_id):
+        result = self.fb_db.reference('/pr/ratData/' + report_id).get()
+
+        return result
+
+    def delete_report(self, report_id):
+        try:
+            self.fb_db.reference('/pr/ratData/' + str(report_id)).delete()
+            return True
+        except:
+            return False
+
 if __name__ == '__main__':
     fb = FirebaseWrapper()
     fb.key_exist('/qa/ratData/', '1')

@@ -15,7 +15,7 @@ class RatReportUtil(object):
 
             return False
 
-        new_report['unique_key'] = new_unique_key
+        new_report['uniqueKey'] = new_unique_key
         new_report['createdDate'] = self.generate_timestamp()
 
         save_status = self.firebase.save_data(loc + new_unique_key, new_report)
@@ -42,7 +42,7 @@ class RatReportUtil(object):
 
     def get_latest_reports(self, limit=50):
         result_dict = self.firebase.get_latest_entries(limit)
-        return [result_dict[k] for k in result_dict]
+        return [result_dict[k] for k in result_dict][::-1]
 
     def get_largest_unique_key(self):
         return self.firebase.get_largest_unique_key()
@@ -57,6 +57,32 @@ class RatReportUtil(object):
             return new_key
         except:
             return '-1'
+
+    def get_report_with_id(self, report_id):
+
+        result = {
+            'status': True,
+            'data': None
+        }
+
+        if report_id is None:
+            result['status'] = False
+            return result
+
+        retrieve_result = self.firebase.get_report(report_id)
+
+        if retrieve_result is None:
+            result['status'] = False
+            return result
+
+        result['data'] = retrieve_result
+
+        return result
+
+    def delete_report(self, report_id):
+
+        return self.firebase.delete_report(report_id)
+
 
 if __name__ == '__main__':
     test = RatReportUtil()
