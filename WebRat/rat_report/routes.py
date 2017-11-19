@@ -85,5 +85,11 @@ def get_reports_in_range():
     return jsonify(rt.get_reports_in_range(request.args.get('begin'), request.args.get('end')))
 
 
+@rat_report_blueprint.route('/getReportsInRangeGrouped', methods=['GET'])
+def get_reports_in_range_grouped():
+    rt = RatReportUtil()
+
+    return jsonify(rt.get_reports_in_range_grouped(request.args.get('begin'), request.args.get('end')))
+
 
 

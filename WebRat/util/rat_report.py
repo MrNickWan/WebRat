@@ -118,6 +118,65 @@ class RatReportUtil(object):
             print('Failed to do something: ' + str(e))
             return return_result
 
+    def get_reports_in_range_grouped(self, begin, end):
+
+        return_result = {
+            'status': False,
+            'data': None
+        }
+
+        try:
+            all_reports = self.firebase.get_all_reports()
+            all_reports_list = [all_reports[k] for k in all_reports]
+
+            begin_date = time.strptime(begin, '%m/%Y')
+            end_date = time.strptime(end, '%m/%Y')
+            filtered_result_list = []
+            result_map = {}
+            print('[Rat Report][get_reports_in_range_grouped] filtering in progress')
+            for report in all_reports_list:
+                date_from_report = report['createdDate'].split(' ')[0]
+                date_from_report_splitted = date_from_report.split('/')
+                date_from_report_reformatted = date_from_report_splitted[0] + '/' + date_from_report_splitted[2]
+
+                # if date_from_report.startswith('0'):
+                    # date_from_report = date_from_report[1:]
+
+                curr_date = time.strptime(date_from_report_reformatted, '%m/%Y')
+
+                if begin_date <= curr_date <= end_date:
+                    report['createdDate'] = date_from_report_reformatted
+                    filtered_result_list.append(report)
+
+            print('[Rat Report][get_reports_in_range_grouped] Grouping in progress')
+            for report in filtered_result_list:
+                report_date = report['createdDate']
+
+                if report_date not in result_map:
+                    result_map[report_date] = {
+                        'date': report_date,
+                        'count': 1
+                    }
+
+                else:
+                    result_map[report_date]['count'] += 1
+
+            print('[Rat Report][get_reports_in_range_grouped] Sorting in progress')
+            result_list = [result_map[k] for k in result_map]
+            result_list.sort(key=lambda x: time.strptime(x['date'], '%m/%Y'))
+
+            split_result = {}
+            split_result['x'] = [e['date'] for e in result_list]
+            split_result['y'] = [e['count'] for e in result_list]
+
+            return_result['status'] = True
+            return_result['data'] = split_result
+
+            return return_result
+        except Exception as e:
+            print('Failed to do something: ' + str(e))
+            return return_result
+
 
 if __name__ == '__main__':
     test = RatReportUtil()
