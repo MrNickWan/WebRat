@@ -43,6 +43,11 @@ def view_report_handler():
     return app.send_static_file('index.html')
 
 
+@app.route('/mapView', methods=['GET'])
+def map_view_handler():
+    return app.send_static_file('index.html')
+
+
 # @app.route("/", defaults={"path": ""})
 # @app.route("/<string:path>")
 # @app.route("/<path:path>")

@@ -78,4 +78,12 @@ def delete_report_handler():
     return str(rt.delete_report(request.get_json()['reportId']))
 
 
+@rat_report_blueprint.route('/getReportsInRange', methods=['GET'])
+def get_reports_in_range():
+    rt = RatReportUtil()
+
+    return jsonify(rt.get_reports_in_range(request.args.get('begin'), request.args.get('end')))
+
+
+
 

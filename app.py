@@ -3,7 +3,7 @@ import os
 
 
 def start_server():
-    if os.environ['env'] == 'pr':
+    if 'env' in os.environ and os.environ['env'] == 'pr':
         app.run()
     else:
         app.run(debug=True)

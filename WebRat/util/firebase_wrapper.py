@@ -49,6 +49,9 @@ class FirebaseWrapper(object):
         except:
             return False
 
+    def get_all_reports(self):
+        return self.fb_db.reference('/pr/ratData/').order_by_key().get()
+
 if __name__ == '__main__':
     fb = FirebaseWrapper()
     fb.key_exist('/qa/ratData/', '1')

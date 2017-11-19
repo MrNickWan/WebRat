@@ -1,6 +1,7 @@
 from WebRat.util.firebase_wrapper import FirebaseWrapper
 import random
 import datetime
+import time
 
 class RatReportUtil(object):
     def __init__(self):
@@ -82,6 +83,40 @@ class RatReportUtil(object):
     def delete_report(self, report_id):
 
         return self.firebase.delete_report(report_id)
+
+    def get_reports_in_range(self, begin, end):
+
+        return_result = {
+            'status': False,
+            'data': None
+        }
+
+        try:
+            all_reports = self.firebase.get_all_reports()
+            all_reports_list = [all_reports[k] for k in all_reports]
+
+            begin_date = time.strptime(begin, '%m/%d/%Y')
+            end_date = time.strptime(end, '%m/%d/%Y')
+            result_list = []
+            print('[Rat Report] filtering in progress')
+            for report in all_reports_list:
+                date_from_report = report['createdDate'].split(' ')[0]
+
+                # if date_from_report.startswith('0'):
+                    # date_from_report = date_from_report[1:]
+
+                curr_date = time.strptime(date_from_report, '%m/%d/%Y')
+
+                if begin_date <= curr_date <= end_date:
+                    result_list.append(report)
+
+            return_result['status'] = True
+            return_result['data'] = result_list
+
+            return return_result
+        except Exception as e:
+            print('Failed to do something: ' + str(e))
+            return return_result
 
 
 if __name__ == '__main__':
