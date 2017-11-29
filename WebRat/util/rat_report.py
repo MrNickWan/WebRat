@@ -2,6 +2,7 @@ from WebRat.util.firebase_wrapper import FirebaseWrapper
 import random
 import datetime
 import time
+from random import shuffle
 
 class RatReportUtil(object):
     def __init__(self):
@@ -109,6 +110,10 @@ class RatReportUtil(object):
 
                 if begin_date <= curr_date <= end_date:
                     result_list.append(report)
+
+            if len(result_list) > 300:
+                shuffle(result_list)
+                result_list = result_list[:300]
 
             return_result['status'] = True
             return_result['data'] = result_list
