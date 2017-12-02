@@ -52,6 +52,24 @@ class FirebaseWrapper(object):
     def get_all_reports(self):
         return self.fb_db.reference('/pr/ratData/').order_by_key().get()
 
+    def add_user(self, user_email):
+        self.fb_db.reference('/pr/onlineUsers/' + user_email).set('True')
+
+        return
+
+    def remove_user(self, user_email):
+        self.fb_db.reference('/pr/onlineUsers/' + user_email).delete()
+
+        return
+
+    def is_user_online(self, user_email):
+        result = self.fb_db.reference('/pr/onlineUsers/').child(user_email).get()
+
+        return result is not None
+
+    def who_is_online(self):
+        return self.fb_db.reference('/pr/onlineUsers/').get()
+
 if __name__ == '__main__':
     fb = FirebaseWrapper()
     fb.key_exist('/qa/ratData/', '1')

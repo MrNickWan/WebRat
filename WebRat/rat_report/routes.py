@@ -92,4 +92,32 @@ def get_reports_in_range_grouped():
     return jsonify(rt.get_reports_in_range_grouped(request.args.get('begin'), request.args.get('end')))
 
 
+@rat_report_blueprint.route('/addOnlineUser', methods=['POST'])
+def add_online_user():
+    rt = RatReportUtil()
+
+    return jsonify(rt.add_online_user(request.get_json()['user']))
+
+
+@rat_report_blueprint.route('/removeOnlineUser', methods=['POST'])
+def remove_online_user():
+    rt = RatReportUtil()
+
+    return jsonify(rt.remove_online_user(request.get_json()['user']))
+
+
+@rat_report_blueprint.route('/isUserOnline', methods=['POST'])
+def is_user_online():
+    rt = RatReportUtil()
+
+    return jsonify(rt.is_user_online(request.get_json()['user']))
+
+
+@rat_report_blueprint.route('/whoIsOnline', methods=['GET'])
+def who_is_online():
+    rt = RatReportUtil()
+
+    return jsonify(rt.who_is_online())
+
+
 

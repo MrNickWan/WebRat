@@ -182,6 +182,44 @@ class RatReportUtil(object):
             print('Failed to do something: ' + str(e))
             return return_result
 
+    def add_online_user(self, user_email):
+
+        first_split = user_email.split('@')
+        user_email = '-'.join(first_split)
+
+        second_split = user_email.split('.')
+        user_email = '-'.join(second_split)
+
+        self.firebase.add_user(user_email)
+
+        return True
+
+    def remove_online_user(self, user_email):
+
+        first_split = user_email.split('@')
+        user_email = '-'.join(first_split)
+
+        second_split = user_email.split('.')
+        user_email = '-'.join(second_split)
+
+        self.firebase.remove_user(user_email)
+
+        return True
+
+    def is_user_online(self, user_email):
+
+        first_split = user_email.split('@')
+        user_email = '-'.join(first_split)
+
+        second_split = user_email.split('.')
+        user_email = '-'.join(second_split)
+
+        return {'status': self.firebase.is_user_online(user_email)}
+
+    def who_is_online(self):
+
+        return self.firebase.who_is_online()
+
 
 if __name__ == '__main__':
     test = RatReportUtil()
